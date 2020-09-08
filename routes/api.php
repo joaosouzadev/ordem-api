@@ -6,19 +6,6 @@ use Illuminate\Support\Facades\Route;
 // Public routes
 Route::get('me', 'User\MeController@getMe');
 
-// clientes
-Route::get('clientes', 'Clientes\ClienteController@index');
-Route::get('clientes/{id}', 'Clientes\ClienteController@findCliente');
-
-// ordens
-Route::get('ordens', 'Ordens\OrdemController@index');
-Route::get('ordens/{id}', 'Ordens\OrdemController@findOrdem');
-
-//users
-Route::get('users', 'User\UserController@index');
-Route::get('user/{username}', 'User\UserController@findByUsername');
-Route::get('users/{id}/designs', 'Designs\DesignController@getForUser');
-
 // Team
 Route::get('teams/slug/{slug}', 'Teams\TeamsController@findBySlug');
 Route::get('teams/{id}/designs', 'Designs\DesignController@getForTeam');
@@ -33,12 +20,22 @@ Route::group(['middleware' => ['auth:api']], function(){
     Route::put('settings/profile', 'User\SettingsController@updateProfile');
     Route::put('settings/password', 'User\SettingsController@updatePassword');
 
+    //users
+    Route::get('users', 'User\UserController@index');
+    Route::get('user/{username}', 'User\UserController@findByUsername');
+    Route::get('users/{id}/designs', 'Designs\DesignController@getForUser');
+
     // Clientes
+    Route::get('clientes', 'Clientes\ClienteController@index');
+    Route::get('clientes/{id}', 'Clientes\ClienteController@findCliente');
     Route::post('clientes', 'Clientes\ClienteController@cadastra');
     Route::put('clientes/{id}', 'Clientes\ClienteController@atualiza');
     Route::delete('clientes/{id}', 'Clientes\ClienteController@deleta');
 
     // Ordens
+    Route::get('ordens', 'Ordens\OrdemController@index');
+    Route::get('ordens/{id}', 'Ordens\OrdemController@findOrdem');
+    Route::get('ordens/{id}/pdf', 'Ordens\PdfController@pdfOrdem');
     Route::post('ordens', 'Ordens\OrdemController@cadastra');
     Route::put('ordens/{id}', 'Ordens\OrdemController@atualiza');
     Route::delete('ordens/{id}', 'Ordens\OrdemController@deleta');

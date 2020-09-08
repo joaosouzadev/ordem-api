@@ -20,6 +20,13 @@ class ClienteResource extends JsonResource
             'nome' => $this->nome,
             'email' => $this->email,
             'telefone' => $this->telefone,
+            'celular' => $this->celular,
+            'cep' => $this->cep,
+            'rua' => $this->rua,
+            'numero' => $this->numero,
+            'complemento' => $this->complemento,
+            'bairro' => $this->bairro,
+            'cidade' => $this->cidade,
         ];
     }
 }

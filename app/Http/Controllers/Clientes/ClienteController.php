@@ -30,7 +30,9 @@ class ClienteController extends Controller
 	}
 
 	public function findCliente($id) {
-		$cliente = $this->clienteInterface->find($id);
+		$cliente = $this->clienteInterface->withCriteria([
+            new ForUser(auth()->user()->id)
+        ])->find($id);
 		return new ClienteResource($cliente);
 	}
 
@@ -43,6 +45,14 @@ class ClienteController extends Controller
         $cliente = auth()->user()->clientes()->create([
             'nome' => $request->nome,
             'email' => $request->email,
+            'telefone' => $request->telefone,
+            'celular' => $request->celular,
+            'cep' => $request->cep,
+            'rua' => $request->rua,
+            'numero' => $request->numero,
+            'complemento' => $request->complemento,
+            'bairro' => $request->bairro,
+            'cidade' => $request->cidade,
         ]);
 
         return response()->json($cliente, 200);
@@ -63,6 +73,13 @@ class ClienteController extends Controller
     		'nome' => $request->nome,
     		'email' => $request->email,
             'telefone' => $request->telefone,
+            'celular' => $request->celular,
+            'cep' => $request->cep,
+            'rua' => $request->rua,
+            'numero' => $request->numero,
+            'complemento' => $request->complemento,
+            'bairro' => $request->bairro,
+            'cidade' => $request->cidade,
     	]);
 
     	return new ClienteResource($cliente);

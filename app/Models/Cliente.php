@@ -11,6 +11,13 @@ class Cliente extends Model
         'nome', 
         'email',
         'telefone',
+        'celular', 
+        'cep',
+        'rua',
+        'numero', 
+        'complemento',
+        'bairro',
+        'cidade',
     ];
 
     public function user() {

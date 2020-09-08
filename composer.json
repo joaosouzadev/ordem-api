@@ -9,16 +9,22 @@
     "license": "MIT",
     "require": {
         "php": "^7.2.5",
+        "barryvdh/laravel-dompdf": "^0.8.6",
+        "barryvdh/laravel-snappy": "^0.4.7",
         "cviebrock/eloquent-taggable": "^7.0",
         "fideloper/proxy": "^4.2",
         "fruitcake/laravel-cors": "^1.0",
         "grimzy/laravel-mysql-spatial": "^2.2",
         "guzzlehttp/guzzle": "^6.3",
+        "h4cc/wkhtmltoimage-amd64": "0.12.x",
+        "h4cc/wkhtmltopdf-amd64": "0.12.x",
         "intervention/image": "^2.5",
         "laravel/framework": "^7.0",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^2.1",
         "league/flysystem-aws-s3-v3": "^1.0",
+        "lucascudo/laravel-pt-br-localization": "^1.1",
+        "niklasravnsborg/laravel-pdf": "^4.0",
         "tymon/jwt-auth": "^1.0"
     },
     "require-dev": {

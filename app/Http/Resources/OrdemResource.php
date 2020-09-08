@@ -16,9 +16,20 @@ class OrdemResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'user_id' => $this->user_id,
-            'cliente_id' => $this->cliente_id,
-            'descricao' => $this->descricao,
+            'user' => $this->user,
+            'cliente' => $this->cliente,
+            'data_entrada' => $this->data_entrada,
+            'data_previsao' => $this->data_previsao,
+            'data_entrega' => $this->data_entrega,
+            'situacao' => $this->situacao,
+            'valor' => $this->valor,
+            'equipamento' => $this->equipamento,
+            'marca' => $this->marca,
+            'modelo' => $this->modelo,
+            'numero_serie' => $this->numero_serie,
+            'garantia' => $this->garantia,
+            'observacoes' => $this->observacoes,
+            'servicos' => $this->servicos,
         ];
     }
 }

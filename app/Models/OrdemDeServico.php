@@ -9,8 +9,21 @@ class OrdemDeServico extends Model
     protected $fillable = [
         'user_id', 
         'cliente_id', 
-        'descricao',
+        'data_entrada',
+        'data_previsao',
+        'data_entrega',
+        'situacao',
+        'valor',
+        'equipamento',
+        'marca',
+        'modelo',
+        'numero_serie',
+        'garantia',
+        'observacoes',
+        'servicos',
     ];
+
+    protected $dates = ['data_entrada', 'data_previsao', 'data_entrega'];
 
     public function user() {
     	return $this->belongsTo(User::class);

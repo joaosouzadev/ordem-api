@@ -12,6 +12,7 @@ use App\Repositories\Contracts\OrdemInterface;
 use App\Repositories\Eloquent\Criteria\LatestFirst;
 use App\Repositories\Eloquent\Criteria\IsLive;
 use App\Repositories\Eloquent\Criteria\ForUser;
+use Snappy;
 
 class OrdemController extends Controller
 {
@@ -30,22 +31,50 @@ class OrdemController extends Controller
 	}
 
 	public function findOrdem($id) {
-		$ordem = $this->ordemInterface->find($id);
+		$ordem = $this->ordemInterface->withCriteria([
+            new ForUser(auth()->user()->id)
+        ])->find($id);
 		return new OrdemResource($ordem);
 	}
 
     public function cadastra(Request $request) {
 
         $this->validate($request, [
-            'descricao' => ['required', 'max:255'],
             'cliente_id' => ['required'],
+            'data_entrada' => ['required', 'max:10'],
+            'equipamento' => ['required'],
         ]);
+
+        $servicos = [];
+        foreach ($request->servicos as $servico) {
+            $servicos[] = $servico;
+        }
 
         $ordem = auth()->user()->ordens()->create([
             'descricao' => $request->descricao,
             'user_id' => $request->user_id,
             'cliente_id' => $request->cliente_id,
+            'data_entrada' => new \DateTime($request->data_entrada),
+            'data_previsao' => $request->data_previsao,
+            'data_entrega' => $request->data_entrega,
+            'situacao' => $request->situacao,
+            'valor' => $request->valor,
+            'equipamento' => $request->equipamento,
+            'marca' => $request->marca,
+            'modelo' => $request->modelo,
+            'numero_serie' => $request->numero_serie,
+            'garantia' => $request->garantia,
+            'observacoes' => $request->observacoes,
+            'servicos' => json_encode($servicos),
         ]);
+
+        $data = [
+            'ordem' => $ordem
+        ];
+        $pdf = Snappy::loadView('ordem_pdf', $data);
+        $pdf->setOption('enable-smart-shrinking', false);
+        $pdf->setOption('margin-top', 0);
+        $pdf->save(storage_path() . '/uploads/pdfs/ordem_' . $ordem->id . '.pdf', true);
 
         return response()->json($ordem, 200);
     }
@@ -57,17 +86,44 @@ class OrdemController extends Controller
     	$this->authorize('update', $ordem);
 
     	$this->validate($request, [
-    		'descricao' => ['required'],
-            'cliente_id' => ['required']
+            'cliente' => ['required']
     		// 'email' => ['required', 'string', 'min:10', 'max:150'],
     	]);
 
+        $servicos = [];
+        foreach ($request->servicos as $servico) {
+            $servicos[] = $servico;
+        }
+
     	$ordem = $this->ordemInterface->update($id, [
-    		'descricao' => $request->descricao
+            'cliente_id' => $request->cliente,
+            'data_entrada' => $request->data_entrada,
+            'data_previsao' => $request->data_previsao,
+            'data_entrega' => $request->data_entrega,
+            'situacao' => $request->situacao,
+            'valor' => $request->valor,
+            'equipamento' => $request->equipamento,
+            'marca' => $request->marca,
+            'modelo' => $request->modelo,
+            'numero_serie' => $request->numero_serie,
+            'garantia' => $request->garantia,
+            'observacoes' => $request->observacoes,
+            'servicos' => json_encode($servicos)
     	]);
 
-        $ordem->cliente()->associate($request->cliente_id);
+        $ordem->cliente()->associate($request->cliente);
         $ordem->save();
+
+        $data = [
+            'ordem' => $ordem
+        ];
+        $pdf = Snappy::loadView('ordem_pdf', $data);
+        $pdf->setOption('enable-smart-shrinking', false);
+        $pdf->setOption('margin-top', 0);
+        $pdf->save(storage_path() . '/uploads/pdfs/ordem_' . $ordem->id . '.pdf', true);
+
+        // $pdf = PDF::loadView('ordem_pdf', compact('ordem'));
+        // $pdf->setPaper('A4')->setOptions(['dpi' => 100])->save(storage_path() . '/uploads/pdfs/ordem_' . $ordem->id . '.pdf');
 
     	return new OrdemResource($ordem);
 	}
